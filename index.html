@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CombosCuba - Tu tienda de combos cubanos</title>
+    <meta name="description" content="Los mejores combos cubanos con envío gratis. Compra fácil y rápido.">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Favicon (opcional) -->
+    <link rel="icon" type="image/png" href="assets/logo.png">
+</head>
+<body>
+    <!-- HEADER PRINCIPAL - IGUAL AL DE LA IMAGEN -->
+    <header class="header">
+        <div class="header-container">
+            <!-- Logo -->
+            <div class="logo">
+                <img src="assets/logo.png" alt="CombosCuba">
+                <span>CombosCuba</span>
+            </div>
+            
+            <!-- Barra de búsqueda -->
+            <div class="search-container">
+                <input type="text" id="searchInput" placeholder="Buscar productos...">
+                <button id="searchBtn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <circle cx="11" cy="11" r="8" stroke="white" stroke-width="2"/>
+                        <path d="M21 21L17 17" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+            
+            <!-- Carrito -->
+            <div class="cart-header" id="cartButton">
+                <div class="cart-icon-container">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path d="M8 22C8.55228 22 9 21.5523 9 21C9 20.4477 8.55228 20 8 20C7.44772 20 7 20.4477 7 21C7 21.5523 7.44772 22 8 22Z" stroke="white" stroke-width="2"/>
+                        <path d="M19 22C19.5523 22 20 21.5523 20 21C20 20.4477 19.5523 20 19 20C18.4477 20 18 20.4477 18 21C18 21.5523 18.4477 22 19 22Z" stroke="white" stroke-width="2"/>
+                        <path d="M2 2H5L7.5 15H19" stroke="white" stroke-width="2" stroke-linecap="round"/>
+                        <circle cx="8" cy="15" r="1" fill="white"/>
+                        <circle cx="18" cy="15" r="1" fill="white"/>
+                    </svg>
+                    <span id="cartCount" class="cart-count">0</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- CONTENEDOR PRINCIPAL - LAYOUT DE LA IMAGEN -->
+    <div class="main-layout">
+        <!-- SIDEBAR - CATEGORÍAS Y FILTROS -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Categorías</h3>
+                <ul class="category-list">
+                    <li class="active" data-category="all">Inicio</li>
+                    <li data-category="navidad">🎄 Navidad</li>
+                    <li data-category="familiar">👪 Familiar</li>
+                    <li data-category="especial">✨ Especial</li>
+                    <li data-category="oferta">🔥 Ofertas</li>
+                </ul>
+            </div>
+            
+            <div class="sidebar-section">
+                <h3>Filtros</h3>
+                
+                <!-- Envío gratis -->
+                <div class="filter-item">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="freeShippingFilter">
+                        <span class="checkmark"></span>
+                        ENVÍO GRATIS
+                    </label>
+                </div>
+                
+                <!-- Select de categorías -->
+                <div class="filter-item">
+                    <label class="filter-label">Categoría</label>
+                    <select id="categoryFilter" class="filter-select">
+                        <option value="all">Todas las categorías</option>
+                        <option value="navidad">Navidad</option>
+                        <option value="familiar">Familiar</option>
+                        <option value="especial">Especial</option>
+                        <option value="oferta">Oferta</option>
+                    </select>
+                </div>
+                
+                <!-- Rango de precio -->
+                <div class="filter-item">
+                    <label class="filter-label">Precio máximo</label>
+                    <div class="price-range">
+                        <input type="range" id="priceRange" min="0" max="350" value="350" step="10">
+                        <div class="price-values">
+                            <span>$0</span>
+                            <span id="priceDisplay">$350+</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL - PRODUCTOS -->
+        <main class="main-content">
+            <!-- Barra de ordenamiento -->
+            <div class="products-toolbar">
+                <h2 id="categoryTitle">Todos los combos</h2>
+                <div class="sort-container">
+                    <span>Ordenar por:</span>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="default">Destacados</option>
+                        <option value="price-asc">Menor precio</option>
+                        <option value="price-desc">Mayor precio</option>
+                        <option value="name-asc">Nombre A-Z</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Grid de productos -->
+            <div class="products-grid" id="productsGrid"></div>
+        </main>
+    </div>
+
+    <!-- MODAL DE PRODUCTO - DESCRIPCIÓN COMPLETA -->
+    <div id="productModal" class="modal">
+        <div class="modal-content product-modal-content">
+            <button class="modal-close">&times;</button>
+            <div id="modalProductDetail" class="modal-product-detail"></div>
+        </div>
+    </div>
+
+    <!-- MODAL DEL CARRITO -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content cart-modal-content">
+            <button class="modal-close">&times;</button>
+            <h2 class="cart-title">🛒 Tu Carrito</h2>
+            <div id="cartItemsContainer" class="cart-items-container"></div>
+            <div class="cart-footer">
+                <div class="cart-total">
+                    <span>Total:</span>
+                    <span id="cartTotalAmount">$0.00</span>
+                </div>
+                <div class="cart-buttons">
+                    <button id="clearCartBtn" class="btn-clear">Vaciar</button>
+                    <button id="checkoutBtn" class="btn-checkout">Finalizar compra</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BOTÓN FLOTANTE WHATSAPP -->
+    <a href="https://wa.me/51916019867?text=Hola%21%20Quiero%20hacer%20un%20pedido" 
+       class="whatsapp-button" 
+       target="_blank" 
+       rel="noopener noreferrer">
+        <img src="icons/whatsapp.svg" alt="WhatsApp">
+    </a>
+
+    <!-- NOTIFICACIÓN -->
+    <div id="notification" class="notification"></div>
+
+    <!-- JAVASCRIPT -->
+    <script src="script.js"></script>
+</body>
+                      </html>
